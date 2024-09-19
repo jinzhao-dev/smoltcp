@@ -46,7 +46,7 @@ impl InterfaceInner {
     /// **NOTE**: unlike for IPv6, no specific selection algorithm is implemented. The first IPv4
     /// address from the interface is returned.
     #[allow(unused)]
-    pub(crate) fn get_source_address_ipv4(&self, _dst_addr: &Ipv4Address) -> Option<Ipv4Address> {
+    pub fn get_source_address_ipv4(&self, _dst_addr: &Ipv4Address) -> Option<Ipv4Address> {
         for cidr in self.ip_addrs.iter() {
             #[allow(irrefutable_let_patterns)] // if only ipv4 is enabled
             if let IpCidr::Ipv4(cidr) = cidr {
@@ -58,7 +58,7 @@ impl InterfaceInner {
 
     /// Checks if an address is broadcast, taking into account ipv4 subnet-local
     /// broadcast addresses.
-    pub(crate) fn is_broadcast_v4(&self, address: Ipv4Address) -> bool {
+    pub fn is_broadcast_v4(&self, address: Ipv4Address) -> bool {
         if address.is_broadcast() {
             return true;
         }

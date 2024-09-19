@@ -459,7 +459,7 @@ impl<'a> Socket<'a> {
         Ok((length, endpoint))
     }
 
-    pub(crate) fn accepts(&self, cx: &mut Context, ip_repr: &IpRepr, repr: &UdpRepr) -> bool {
+    pub fn accepts(&self, cx: &mut Context, ip_repr: &IpRepr, repr: &UdpRepr) -> bool {
         if self.endpoint.port != repr.dst_port {
             return false;
         }
@@ -474,7 +474,7 @@ impl<'a> Socket<'a> {
         true
     }
 
-    pub(crate) fn process(
+    pub fn process(
         &mut self,
         cx: &mut Context,
         meta: PacketMeta,
@@ -517,7 +517,7 @@ impl<'a> Socket<'a> {
         self.rx_waker.wake();
     }
 
-    pub(crate) fn dispatch<F, E>(&mut self, cx: &mut Context, emit: F) -> Result<(), E>
+    pub fn dispatch<F, E>(&mut self, cx: &mut Context, emit: F) -> Result<(), E>
     where
         F: FnOnce(&mut Context, PacketMeta, (IpRepr, UdpRepr, &[u8])) -> Result<(), E>,
     {
@@ -576,7 +576,7 @@ impl<'a> Socket<'a> {
         }
     }
 
-    pub(crate) fn poll_at(&self, _cx: &mut Context) -> PollAt {
+    pub fn poll_at(&self, _cx: &mut Context) -> PollAt {
         if self.tx_buffer.is_empty() {
             PollAt::Ingress
         } else {

@@ -3,7 +3,7 @@ use super::rank::Rank;
 
 pub struct ObjectiveFunction0;
 
-pub(crate) trait ObjectiveFunction {
+pub trait ObjectiveFunction {
     const OCP: u16;
 
     /// Return the new calculated Rank, based on information from the parent.

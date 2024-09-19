@@ -591,7 +591,7 @@ impl<T: AsRef<[u8]>> UdpNhcPacket<T> {
     }
 
     // Return the size of the checksum field.
-    pub(crate) fn checksum_size(&self) -> usize {
+    pub fn checksum_size(&self) -> usize {
         match self.checksum_field() {
             0b0 => 2,
             0b1 => 0,
@@ -600,7 +600,7 @@ impl<T: AsRef<[u8]>> UdpNhcPacket<T> {
     }
 
     /// Returns the total size of both port numbers.
-    pub(crate) fn ports_size(&self) -> usize {
+    pub fn ports_size(&self) -> usize {
         match self.ports_field() {
             0b00 => 4, // 16 bits + 16 bits
             0b01 => 3, // 16 bits + 8 bits

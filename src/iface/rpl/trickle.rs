@@ -16,7 +16,7 @@ use crate::{
 
 #[derive(Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub(crate) struct TrickleTimer {
+pub struct TrickleTimer {
     i_min: u32,
     i_max: u32,
     k: usize,
@@ -39,7 +39,7 @@ impl TrickleTimer {
     /// don't use the default values from the standard, but the values from the _Enhanced Trickle
     /// Algorithm for Low-Power and Lossy Networks_ from Baraq Ghaleb et al. This is also what the
     /// Contiki Trickle timer does.
-    pub(crate) fn default(now: Instant, rand: &mut Rand) -> Self {
+    pub fn default(now: Instant, rand: &mut Rand) -> Self {
         use super::consts::{
             DEFAULT_DIO_INTERVAL_DOUBLINGS, DEFAULT_DIO_INTERVAL_MIN,
             DEFAULT_DIO_REDUNDANCY_CONSTANT,
@@ -55,7 +55,7 @@ impl TrickleTimer {
     }
 
     /// Create a new Trickle timer.
-    pub(crate) fn new(i_min: u32, i_max: u32, k: usize, now: Instant, rand: &mut Rand) -> Self {
+    pub fn new(i_min: u32, i_max: u32, k: usize, now: Instant, rand: &mut Rand) -> Self {
         let mut timer = Self {
             i_min,
             i_max,
@@ -78,7 +78,7 @@ impl TrickleTimer {
 
     /// Poll the Trickle timer. Returns `true` when the Trickle timer signals that a message can be
     /// transmitted. This happens when the Trickle timer expires.
-    pub(crate) fn poll(&mut self, now: Instant, rand: &mut Rand) -> bool {
+    pub fn poll(&mut self, now: Instant, rand: &mut Rand) -> bool {
         let can_transmit = self.can_transmit() && self.t_expired(now);
 
         if can_transmit {
@@ -94,19 +94,19 @@ impl TrickleTimer {
 
     /// Returns the Instant at which the Trickle timer should be polled again. Polling the Trickle
     /// timer before this Instant is not harmfull, however, polling after it is not correct.
-    pub(crate) fn poll_at(&self) -> Instant {
+    pub fn poll_at(&self) -> Instant {
         self.t_exp.min(self.i_exp)
     }
 
     /// Signal the Trickle timer that a consistency has been heard, and thus increasing it's
     /// counter.
-    pub(crate) fn hear_consistent(&mut self) {
+    pub fn hear_consistent(&mut self) {
         self.counter += 1;
     }
 
     /// Signal the Trickle timer that an inconsistency has been heard. This resets the Trickle
     /// timer when the current interval is not the smallest possible.
-    pub(crate) fn hear_inconsistency(&mut self, now: Instant, rand: &mut Rand) {
+    pub fn hear_inconsistency(&mut self, now: Instant, rand: &mut Rand) {
         let i = Duration::from_millis(2u32.pow(self.i_min) as u64);
         if self.i > i {
             self.reset(i, now, rand);
@@ -115,7 +115,7 @@ impl TrickleTimer {
 
     /// Check if the Trickle timer can transmit or not. Returns `false` when the consistency
     /// counter is bigger or equal to the default consistency constant.
-    pub(crate) fn can_transmit(&self) -> bool {
+    pub fn can_transmit(&self) -> bool {
         self.k != 0 && self.counter < self.k
     }
 
@@ -131,18 +131,18 @@ impl TrickleTimer {
         self.reset(i, now, rand);
     }
 
-    pub(crate) fn reset(&mut self, i: Duration, now: Instant, rand: &mut Rand) {
+    pub fn reset(&mut self, i: Duration, now: Instant, rand: &mut Rand) {
         self.i = i;
         self.i_exp = now + self.i;
         self.counter = 0;
         self.set_t(now, rand);
     }
 
-    pub(crate) const fn max_expiration(&self) -> Duration {
+    pub const fn max_expiration(&self) -> Duration {
         Duration::from_millis(2u32.pow(self.i_max) as u64)
     }
 
-    pub(crate) const fn min_expiration(&self) -> Duration {
+    pub const fn min_expiration(&self) -> Duration {
         Duration::from_millis(2u32.pow(self.i_min) as u64)
     }
 

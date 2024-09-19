@@ -168,10 +168,10 @@ pub struct Socket<'a> {
     ignore_naks: bool,
 
     /// Server port config
-    pub(crate) server_port: u16,
+    pub server_port: u16,
 
     /// Client port config
-    pub(crate) client_port: u16,
+    pub client_port: u16,
 
     /// A buffer contains options additional to be added to outgoing DHCP
     /// packets.
@@ -287,7 +287,7 @@ impl<'a> Socket<'a> {
         self.client_port = client_port;
     }
 
-    pub(crate) fn poll_at(&self, _cx: &mut Context) -> PollAt {
+    pub fn poll_at(&self, _cx: &mut Context) -> PollAt {
         let t = match &self.state {
             ClientState::Discovering(state) => state.retry_at,
             ClientState::Requesting(state) => state.retry_at,
@@ -301,7 +301,7 @@ impl<'a> Socket<'a> {
         PollAt::Time(t)
     }
 
-    pub(crate) fn process(
+    pub fn process(
         &mut self,
         cx: &mut Context,
         ip_repr: &Ipv4Repr,
@@ -547,7 +547,7 @@ impl<'a> Socket<'a> {
         0x12345678
     }
 
-    pub(crate) fn dispatch<F, E>(&mut self, cx: &mut Context, emit: F) -> Result<(), E>
+    pub fn dispatch<F, E>(&mut self, cx: &mut Context, emit: F) -> Result<(), E>
     where
         F: FnOnce(&mut Context, (Ipv4Repr, UdpRepr, DhcpRepr)) -> Result<(), E>,
     {
@@ -753,7 +753,7 @@ impl<'a> Socket<'a> {
     /// This function _must_ be called when the configuration provided to the
     /// interface, by this DHCP socket, changes. It will update the `config_changed` field
     /// so that a subsequent call to `poll` will yield an event, and wake a possible waker.
-    pub(crate) fn config_changed(&mut self) {
+    pub fn config_changed(&mut self) {
         self.config_changed = true;
         #[cfg(feature = "async")]
         self.waker.wake();

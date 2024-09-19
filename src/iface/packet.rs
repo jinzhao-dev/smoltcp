@@ -5,7 +5,7 @@ use crate::wire::*;
 #[derive(Debug, PartialEq)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[cfg(feature = "medium-ethernet")]
-pub(crate) enum EthernetPacket<'a> {
+pub enum EthernetPacket<'a> {
     #[cfg(feature = "proto-ipv4")]
     Arp(ArpRepr),
     Ip(Packet<'a>),
@@ -13,7 +13,7 @@ pub(crate) enum EthernetPacket<'a> {
 
 #[derive(Debug, PartialEq)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub(crate) enum Packet<'p> {
+pub enum Packet<'p> {
     #[cfg(feature = "proto-ipv4")]
     Ipv4(PacketV4<'p>),
     #[cfg(feature = "proto-ipv6")]
@@ -21,7 +21,7 @@ pub(crate) enum Packet<'p> {
 }
 
 impl<'p> Packet<'p> {
-    pub(crate) fn new(ip_repr: IpRepr, payload: IpPayload<'p>) -> Self {
+    pub fn new(ip_repr: IpRepr, payload: IpPayload<'p>) -> Self {
         match ip_repr {
             #[cfg(feature = "proto-ipv4")]
             IpRepr::Ipv4(header) => Self::new_ipv4(header, payload),
@@ -31,7 +31,7 @@ impl<'p> Packet<'p> {
     }
 
     #[cfg(feature = "proto-ipv4")]
-    pub(crate) fn new_ipv4(ip_repr: Ipv4Repr, payload: IpPayload<'p>) -> Self {
+    pub fn new_ipv4(ip_repr: Ipv4Repr, payload: IpPayload<'p>) -> Self {
         Self::Ipv4(PacketV4 {
             header: ip_repr,
             payload,
@@ -39,7 +39,7 @@ impl<'p> Packet<'p> {
     }
 
     #[cfg(feature = "proto-ipv6")]
-    pub(crate) fn new_ipv6(ip_repr: Ipv6Repr, payload: IpPayload<'p>) -> Self {
+    pub fn new_ipv6(ip_repr: Ipv6Repr, payload: IpPayload<'p>) -> Self {
         Self::Ipv6(PacketV6 {
             header: ip_repr,
             #[cfg(feature = "proto-ipv6-hbh")]
@@ -52,7 +52,7 @@ impl<'p> Packet<'p> {
         })
     }
 
-    pub(crate) fn ip_repr(&self) -> IpRepr {
+    pub fn ip_repr(&self) -> IpRepr {
         match self {
             #[cfg(feature = "proto-ipv4")]
             Packet::Ipv4(p) => IpRepr::Ipv4(p.header),
@@ -61,7 +61,7 @@ impl<'p> Packet<'p> {
         }
     }
 
-    pub(crate) fn payload(&self) -> &IpPayload<'p> {
+    pub fn payload(&self) -> &IpPayload<'p> {
         match self {
             #[cfg(feature = "proto-ipv4")]
             Packet::Ipv4(p) => &p.payload,
@@ -70,7 +70,7 @@ impl<'p> Packet<'p> {
         }
     }
 
-    pub(crate) fn emit_payload(
+    pub fn emit_payload(
         &self,
         _ip_repr: &IpRepr,
         payload: &mut [u8],
@@ -183,7 +183,7 @@ impl<'p> Packet<'p> {
 #[derive(Debug, PartialEq)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[cfg(feature = "proto-ipv4")]
-pub(crate) struct PacketV4<'p> {
+pub struct PacketV4<'p> {
     header: Ipv4Repr,
     payload: IpPayload<'p>,
 }
@@ -191,20 +191,20 @@ pub(crate) struct PacketV4<'p> {
 #[derive(Debug, PartialEq)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[cfg(feature = "proto-ipv6")]
-pub(crate) struct PacketV6<'p> {
-    pub(crate) header: Ipv6Repr,
+pub struct PacketV6<'p> {
+    pub header: Ipv6Repr,
     #[cfg(feature = "proto-ipv6-hbh")]
-    pub(crate) hop_by_hop: Option<Ipv6HopByHopRepr<'p>>,
+    pub hop_by_hop: Option<Ipv6HopByHopRepr<'p>>,
     #[cfg(feature = "proto-ipv6-fragmentation")]
-    pub(crate) fragment: Option<Ipv6FragmentRepr>,
+    pub fragment: Option<Ipv6FragmentRepr>,
     #[cfg(feature = "proto-ipv6-routing")]
-    pub(crate) routing: Option<Ipv6RoutingRepr<'p>>,
-    pub(crate) payload: IpPayload<'p>,
+    pub routing: Option<Ipv6RoutingRepr<'p>>,
+    pub payload: IpPayload<'p>,
 }
 
 #[derive(Debug, PartialEq)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub(crate) enum IpPayload<'p> {
+pub enum IpPayload<'p> {
     #[cfg(feature = "proto-ipv4")]
     Icmpv4(Icmpv4Repr<'p>),
     #[cfg(all(feature = "proto-ipv4", feature = "multicast"))]
@@ -225,7 +225,7 @@ pub(crate) enum IpPayload<'p> {
 
 impl<'p> IpPayload<'p> {
     #[cfg(feature = "proto-sixlowpan")]
-    pub(crate) fn as_sixlowpan_next_header(&self) -> SixlowpanNextHeader {
+    pub fn as_sixlowpan_next_header(&self) -> SixlowpanNextHeader {
         match self {
             #[cfg(feature = "proto-ipv4")]
             Self::Icmpv4(_) => unreachable!(),
@@ -248,7 +248,7 @@ impl<'p> IpPayload<'p> {
 }
 
 #[cfg(any(feature = "proto-ipv4", feature = "proto-ipv6"))]
-pub(crate) fn icmp_reply_payload_len(len: usize, mtu: usize, header_len: usize) -> usize {
+pub fn icmp_reply_payload_len(len: usize, mtu: usize, header_len: usize) -> usize {
     // Send back as much of the original payload as will fit within
     // the minimum MTU required by IPv4. See RFC 1812 § 4.3.2.3 for
     // more details.

@@ -1,7 +1,7 @@
 use crate::iface::*;
 use crate::wire::*;
 
-pub(crate) fn setup<'a>(medium: Medium) -> (Interface, SocketSet<'a>, TestingDevice) {
+pub fn setup<'a>(medium: Medium) -> (Interface, SocketSet<'a>, TestingDevice) {
     let mut device = TestingDevice::new(medium);
 
     let config = Config::new(match medium {
@@ -58,7 +58,7 @@ use crate::time::Instant;
 /// A testing device.
 #[derive(Debug)]
 pub struct TestingDevice {
-    pub(crate) queue: Deque<Vec<u8, 1514>, 4>,
+    pub queue: Deque<Vec<u8, 1514>, 4>,
     max_transmission_unit: usize,
     medium: Medium,
 }

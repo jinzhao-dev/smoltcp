@@ -76,7 +76,7 @@ impl<K> PacketAssembler<K> {
         }
     }
 
-    pub(crate) fn reset(&mut self) {
+    pub fn reset(&mut self) {
         self.key = None;
         self.assembler.clear();
         self.total_size = None;
@@ -84,7 +84,7 @@ impl<K> PacketAssembler<K> {
     }
 
     /// Set the total size of the packet assembler.
-    pub(crate) fn set_total_size(&mut self, size: usize) -> Result<(), AssemblerError> {
+    pub fn set_total_size(&mut self, size: usize) -> Result<(), AssemblerError> {
         if let Some(old_size) = self.total_size {
             if old_size != size {
                 return Err(AssemblerError);
@@ -106,11 +106,11 @@ impl<K> PacketAssembler<K> {
     }
 
     /// Return the instant when the assembler expires.
-    pub(crate) fn expires_at(&self) -> Instant {
+    pub fn expires_at(&self) -> Instant {
         self.expires_at
     }
 
-    pub(crate) fn add_with(
+    pub fn add_with(
         &mut self,
         offset: usize,
         f: impl Fn(&mut [u8]) -> Result<usize, AssemblerError>,
@@ -138,7 +138,7 @@ impl<K> PacketAssembler<K> {
     ///
     /// - Returns [`Error::PacketAssemblerBufferTooSmall`] when trying to add data into the buffer at a non-existing
     /// place.
-    pub(crate) fn add(&mut self, data: &[u8], offset: usize) -> Result<(), AssemblerError> {
+    pub fn add(&mut self, data: &[u8], offset: usize) -> Result<(), AssemblerError> {
         #[cfg(not(feature = "alloc"))]
         if self.buffer.len() < offset + data.len() {
             return Err(AssemblerError);
@@ -164,7 +164,7 @@ impl<K> PacketAssembler<K> {
 
     /// Get an immutable slice of the underlying packet data, if reassembly complete.
     /// This will mark the assembler as empty, so that it can be reused.
-    pub(crate) fn assemble(&mut self) -> Option<&'_ [u8]> {
+    pub fn assemble(&mut self) -> Option<&'_ [u8]> {
         if !self.is_complete() {
             return None;
         }
@@ -176,7 +176,7 @@ impl<K> PacketAssembler<K> {
     }
 
     /// Returns `true` when all fragments have been received, otherwise `false`.
-    pub(crate) fn is_complete(&self) -> bool {
+    pub fn is_complete(&self) -> bool {
         self.total_size == Some(self.assembler.peek_front())
     }
 
@@ -207,7 +207,7 @@ impl<K: Eq + Copy> PacketAssemblerSet<K> {
     /// If it doesn't exist, it is created, with the `expires_at` timestamp.
     ///
     /// If the assembler set is full, in which case an error is returned.
-    pub(crate) fn get(
+    pub fn get(
         &mut self,
         key: &K,
         expires_at: Instant,
@@ -240,19 +240,19 @@ impl<K: Eq + Copy> PacketAssemblerSet<K> {
 
 // Max len of non-fragmented packets after decompression (including ipv6 header and payload)
 // TODO: lower. Should be (6lowpan mtu) - (min 6lowpan header size) + (max ipv6 header size)
-pub(crate) const MAX_DECOMPRESSED_LEN: usize = 1500;
+pub const MAX_DECOMPRESSED_LEN: usize = 1500;
 
 #[cfg(feature = "_proto-fragmentation")]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Clone, Copy)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub(crate) enum FragKey {
+pub enum FragKey {
     #[cfg(feature = "proto-ipv4-fragmentation")]
     Ipv4(Ipv4FragKey),
     #[cfg(feature = "proto-sixlowpan-fragmentation")]
     Sixlowpan(SixlowpanFragKey),
 }
 
-pub(crate) struct FragmentsBuffer {
+pub struct FragmentsBuffer {
     #[cfg(feature = "proto-sixlowpan")]
     pub decompress_buf: [u8; MAX_DECOMPRESSED_LEN],
 
@@ -264,17 +264,17 @@ pub(crate) struct FragmentsBuffer {
 }
 
 #[cfg(not(feature = "_proto-fragmentation"))]
-pub(crate) struct Fragmenter {}
+pub struct Fragmenter {}
 
 #[cfg(not(feature = "_proto-fragmentation"))]
 impl Fragmenter {
-    pub(crate) fn new() -> Self {
+    pub fn new() -> Self {
         Self {}
     }
 }
 
 #[cfg(feature = "_proto-fragmentation")]
-pub(crate) struct Fragmenter {
+pub struct Fragmenter {
     /// The buffer that holds the unfragmented 6LoWPAN packet.
     pub buffer: [u8; FRAGMENTATION_BUFFER_SIZE],
     /// The size of the packet without the IEEE802.15.4 header and the fragmentation headers.
@@ -289,7 +289,7 @@ pub(crate) struct Fragmenter {
 }
 
 #[cfg(feature = "proto-ipv4-fragmentation")]
-pub(crate) struct Ipv4Fragmenter {
+pub struct Ipv4Fragmenter {
     /// The IPv4 representation.
     pub repr: Ipv4Repr,
     /// The destination hardware address.
@@ -302,7 +302,7 @@ pub(crate) struct Ipv4Fragmenter {
 }
 
 #[cfg(feature = "proto-sixlowpan-fragmentation")]
-pub(crate) struct SixlowpanFragmenter {
+pub struct SixlowpanFragmenter {
     /// The datagram size that is used for the fragmentation headers.
     pub datagram_size: u16,
     /// The datagram tag that is used for the fragmentation headers.
@@ -320,7 +320,7 @@ pub(crate) struct SixlowpanFragmenter {
 
 #[cfg(feature = "_proto-fragmentation")]
 impl Fragmenter {
-    pub(crate) fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             buffer: [0u8; FRAGMENTATION_BUFFER_SIZE],
             packet_len: 0,
@@ -355,18 +355,18 @@ impl Fragmenter {
 
     /// Return `true` when everything is transmitted.
     #[inline]
-    pub(crate) fn finished(&self) -> bool {
+    pub fn finished(&self) -> bool {
         self.packet_len == self.sent_bytes
     }
 
     /// Returns `true` when there is nothing to transmit.
     #[inline]
-    pub(crate) fn is_empty(&self) -> bool {
+    pub fn is_empty(&self) -> bool {
         self.packet_len == 0
     }
 
     // Reset the buffer.
-    pub(crate) fn reset(&mut self) {
+    pub fn reset(&mut self) {
         self.packet_len = 0;
         self.sent_bytes = 0;
 

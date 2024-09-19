@@ -416,7 +416,7 @@ impl<'a> Socket<'a> {
     /// Accepted packets are enqueued into the socket's receive buffer.
     #[cfg(feature = "proto-ipv4")]
     #[inline]
-    pub(crate) fn accepts_v4(
+    pub fn accepts_v4(
         &self,
         cx: &mut Context,
         ip_repr: &Ipv4Repr,
@@ -458,7 +458,7 @@ impl<'a> Socket<'a> {
     /// Accepted packets are enqueued into the socket's receive buffer.
     #[cfg(feature = "proto-ipv6")]
     #[inline]
-    pub(crate) fn accepts_v6(
+    pub fn accepts_v6(
         &self,
         cx: &mut Context,
         ip_repr: &Ipv6Repr,
@@ -497,7 +497,7 @@ impl<'a> Socket<'a> {
     }
 
     #[cfg(feature = "proto-ipv4")]
-    pub(crate) fn process_v4(
+    pub fn process_v4(
         &mut self,
         _cx: &mut Context,
         ip_repr: &Ipv4Repr,
@@ -523,7 +523,7 @@ impl<'a> Socket<'a> {
     }
 
     #[cfg(feature = "proto-ipv6")]
-    pub(crate) fn process_v6(
+    pub fn process_v6(
         &mut self,
         _cx: &mut Context,
         ip_repr: &Ipv6Repr,
@@ -548,7 +548,7 @@ impl<'a> Socket<'a> {
         self.rx_waker.wake();
     }
 
-    pub(crate) fn dispatch<F, E>(&mut self, cx: &mut Context, emit: F) -> Result<(), E>
+    pub fn dispatch<F, E>(&mut self, cx: &mut Context, emit: F) -> Result<(), E>
     where
         F: FnOnce(&mut Context, (IpRepr, IcmpRepr)) -> Result<(), E>,
     {
@@ -634,7 +634,7 @@ impl<'a> Socket<'a> {
         }
     }
 
-    pub(crate) fn poll_at(&self, _cx: &mut Context) -> PollAt {
+    pub fn poll_at(&self, _cx: &mut Context) -> PollAt {
         if self.tx_buffer.is_empty() {
             PollAt::Ingress
         } else {

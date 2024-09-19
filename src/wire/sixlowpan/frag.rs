@@ -11,10 +11,10 @@ use byteorder::{ByteOrder, NetworkEndian};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Key {
-    pub(crate) ll_src_addr: Ieee802154Address,
-    pub(crate) ll_dst_addr: Ieee802154Address,
-    pub(crate) datagram_size: u16,
-    pub(crate) datagram_tag: u16,
+    pub ll_src_addr: Ieee802154Address,
+    pub ll_dst_addr: Ieee802154Address,
+    pub datagram_size: u16,
+    pub datagram_tag: u16,
 }
 
 /// A read/write wrapper around a 6LoWPAN Fragment header.

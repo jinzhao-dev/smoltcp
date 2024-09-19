@@ -30,7 +30,7 @@ pub const IPV4_MAPPED_PREFIX_SIZE: usize = ADDR_SIZE - 4; // 4 == ipv4::ADDR_SIZ
 /// [scope]: https://www.rfc-editor.org/rfc/rfc4291#section-2.7
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub(crate) enum MulticastScope {
+pub enum MulticastScope {
     /// Interface Local scope
     InterfaceLocal = 0x1,
     /// Link local scope
@@ -288,7 +288,7 @@ impl Address {
     }
 
     /// Return the scope of the address.
-    pub(crate) fn multicast_scope(&self) -> MulticastScope {
+    pub fn multicast_scope(&self) -> MulticastScope {
         if self.is_multicast() {
             return MulticastScope::from(self.as_bytes()[1] & 0b1111);
         }
@@ -903,7 +903,7 @@ impl<T: AsRef<[u8]>> PrettyPrint for Packet<T> {
 }
 
 #[cfg(test)]
-pub(crate) mod test {
+pub mod test {
     use super::Error;
     use super::{Address, Cidr};
     use super::{Packet, Protocol, Repr};
@@ -913,19 +913,19 @@ pub(crate) mod test {
     use crate::wire::ipv4::Address as Ipv4Address;
 
     #[allow(unused)]
-    pub(crate) const MOCK_IP_ADDR_1: Address =
+    pub const MOCK_IP_ADDR_1: Address =
         Address([0xfe, 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
     #[allow(unused)]
-    pub(crate) const MOCK_IP_ADDR_2: Address =
+    pub const MOCK_IP_ADDR_2: Address =
         Address([0xfe, 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2]);
     #[allow(unused)]
-    pub(crate) const MOCK_IP_ADDR_3: Address =
+    pub const MOCK_IP_ADDR_3: Address =
         Address([0xfe, 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3]);
     #[allow(unused)]
-    pub(crate) const MOCK_IP_ADDR_4: Address =
+    pub const MOCK_IP_ADDR_4: Address =
         Address([0xfe, 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4]);
     #[allow(unused)]
-    pub(crate) const MOCK_UNSPECIFIED: Address = Address::UNSPECIFIED;
+    pub const MOCK_UNSPECIFIED: Address = Address::UNSPECIFIED;
 
     const LINK_LOCAL_ADDR: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 1);
     const UNIQUE_LOCAL_ADDR: Address = Address::new(0xfd00, 0, 0, 201, 1, 1, 1, 1);

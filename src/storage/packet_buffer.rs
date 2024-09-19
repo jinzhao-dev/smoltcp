@@ -241,7 +241,7 @@ impl<'a, H> PacketBuffer<'a, H> {
 
     /// Reset the packet buffer and clear any staged.
     #[allow(unused)]
-    pub(crate) fn reset(&mut self) {
+    pub fn reset(&mut self) {
         self.payload_ring.clear();
         self.metadata_ring.clear();
     }

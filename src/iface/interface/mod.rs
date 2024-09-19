@@ -18,7 +18,7 @@ mod ipv6;
 mod sixlowpan;
 
 #[cfg(feature = "multicast")]
-pub(crate) mod multicast;
+pub mod multicast;
 #[cfg(feature = "socket-tcp")]
 mod tcp;
 #[cfg(any(feature = "socket-udp", feature = "socket-dns"))]
@@ -71,7 +71,7 @@ use check;
 /// a dependency on heap allocation, it instead owns a `BorrowMut<[T]>`, which can be
 /// a `&mut [T]`, or `Vec<T>` if a heap is available.
 pub struct Interface {
-    pub(crate) inner: InterfaceInner,
+    pub inner: InterfaceInner,
     fragments: FragmentsBuffer,
     fragmenter: Fragmenter,
 }
@@ -669,33 +669,33 @@ impl Interface {
 
 impl InterfaceInner {
     #[allow(unused)] // unused depending on which sockets are enabled
-    pub(crate) fn now(&self) -> Instant {
+    pub fn now(&self) -> Instant {
         self.now
     }
 
     #[cfg(any(feature = "medium-ethernet", feature = "medium-ieee802154"))]
     #[allow(unused)] // unused depending on which sockets are enabled
-    pub(crate) fn hardware_addr(&self) -> HardwareAddress {
+    pub fn hardware_addr(&self) -> HardwareAddress {
         self.hardware_addr
     }
 
     #[allow(unused)] // unused depending on which sockets are enabled
-    pub(crate) fn checksum_caps(&self) -> ChecksumCapabilities {
+    pub fn checksum_caps(&self) -> ChecksumCapabilities {
         self.caps.checksum.clone()
     }
 
     #[allow(unused)] // unused depending on which sockets are enabled
-    pub(crate) fn ip_mtu(&self) -> usize {
+    pub fn ip_mtu(&self) -> usize {
         self.caps.ip_mtu()
     }
 
     #[allow(unused)] // unused depending on which sockets are enabled, and in tests
-    pub(crate) fn rand(&mut self) -> &mut Rand {
+    pub fn rand(&mut self) -> &mut Rand {
         &mut self.rand
     }
 
     #[allow(unused)] // unused depending on which sockets are enabled
-    pub(crate) fn get_source_address(&self, dst_addr: &IpAddress) -> Option<IpAddress> {
+    pub fn get_source_address(&self, dst_addr: &IpAddress) -> Option<IpAddress> {
         match dst_addr {
             #[cfg(feature = "proto-ipv4")]
             IpAddress::Ipv4(addr) => self.get_source_address_ipv4(addr).map(|a| a.into()),
@@ -706,7 +706,7 @@ impl InterfaceInner {
 
     #[cfg(test)]
     #[allow(unused)] // unused depending on which sockets are enabled
-    pub(crate) fn set_now(&mut self, now: Instant) {
+    pub fn set_now(&mut self, now: Instant) {
         self.now = now
     }
 
@@ -802,7 +802,7 @@ impl InterfaceInner {
 
     /// Checks if an address is broadcast, taking into account ipv4 subnet-local
     /// broadcast addresses.
-    pub(crate) fn is_broadcast(&self, address: &IpAddress) -> bool {
+    pub fn is_broadcast(&self, address: &IpAddress) -> bool {
         match address {
             #[cfg(feature = "proto-ipv4")]
             IpAddress::Ipv4(address) => self.is_broadcast_v4(*address),

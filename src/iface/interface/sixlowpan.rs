@@ -3,7 +3,7 @@ use crate::wire::Result;
 
 // Max len of non-fragmented packets after decompression (including ipv6 header and payload)
 // TODO: lower. Should be (6lowpan mtu) - (min 6lowpan header size) + (max ipv6 header size)
-pub(crate) const MAX_DECOMPRESSED_LEN: usize = 1500;
+pub const MAX_DECOMPRESSED_LEN: usize = 1500;
 
 impl Interface {
     /// Process fragments that still need to be sent for 6LoWPAN packets.

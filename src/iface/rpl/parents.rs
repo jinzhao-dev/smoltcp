@@ -4,7 +4,7 @@ use super::{lollipop::SequenceCounter, rank::Rank};
 use crate::config::RPL_PARENTS_BUFFER_COUNT;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub(crate) struct Parent {
+pub struct Parent {
     rank: Rank,
     preference: u8,
     version_number: SequenceCounter,
@@ -13,7 +13,7 @@ pub(crate) struct Parent {
 
 impl Parent {
     /// Create a new parent.
-    pub(crate) fn new(
+    pub fn new(
         preference: u8,
         rank: Rank,
         version_number: SequenceCounter,
@@ -28,20 +28,20 @@ impl Parent {
     }
 
     /// Return the Rank of the parent.
-    pub(crate) fn rank(&self) -> &Rank {
+    pub fn rank(&self) -> &Rank {
         &self.rank
     }
 }
 
 #[derive(Debug, Default)]
-pub(crate) struct ParentSet {
+pub struct ParentSet {
     parents: heapless::LinearMap<Ipv6Address, Parent, { RPL_PARENTS_BUFFER_COUNT }>,
 }
 
 impl ParentSet {
     /// Add a new parent to the parent set. The Rank of the new parent should be lower than the
     /// Rank of the node that holds this parent set.
-    pub(crate) fn add(&mut self, address: Ipv6Address, parent: Parent) {
+    pub fn add(&mut self, address: Ipv6Address, parent: Parent) {
         if let Some(p) = self.parents.get_mut(&address) {
             *p = parent;
         } else if let Err(p) = self.parents.insert(address, parent) {
@@ -59,17 +59,17 @@ impl ParentSet {
     }
 
     /// Find a parent based on its address.
-    pub(crate) fn find(&self, address: &Ipv6Address) -> Option<&Parent> {
+    pub fn find(&self, address: &Ipv6Address) -> Option<&Parent> {
         self.parents.get(address)
     }
 
     /// Find a mutable parent based on its address.
-    pub(crate) fn find_mut(&mut self, address: &Ipv6Address) -> Option<&mut Parent> {
+    pub fn find_mut(&mut self, address: &Ipv6Address) -> Option<&mut Parent> {
         self.parents.get_mut(address)
     }
 
     /// Return a slice to the parent set.
-    pub(crate) fn parents(&self) -> impl Iterator<Item = (&Ipv6Address, &Parent)> {
+    pub fn parents(&self) -> impl Iterator<Item = (&Ipv6Address, &Parent)> {
         self.parents.iter()
     }
 

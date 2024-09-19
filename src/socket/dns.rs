@@ -368,7 +368,7 @@ impl<'a> Socket<'a> {
             .register(waker);
     }
 
-    pub(crate) fn accepts(&self, ip_repr: &IpRepr, udp_repr: &UdpRepr) -> bool {
+    pub fn accepts(&self, ip_repr: &IpRepr, udp_repr: &UdpRepr) -> bool {
         (udp_repr.src_port == DNS_PORT
             && self
                 .servers
@@ -377,7 +377,7 @@ impl<'a> Socket<'a> {
             || (udp_repr.src_port == MDNS_DNS_PORT)
     }
 
-    pub(crate) fn process(
+    pub fn process(
         &mut self,
         _cx: &mut Context,
         ip_repr: &IpRepr,
@@ -531,7 +531,7 @@ impl<'a> Socket<'a> {
         net_trace!("no query matched");
     }
 
-    pub(crate) fn dispatch<F, E>(&mut self, cx: &mut Context, emit: F) -> Result<(), E>
+    pub fn dispatch<F, E>(&mut self, cx: &mut Context, emit: F) -> Result<(), E>
     where
         F: FnOnce(&mut Context, (IpRepr, UdpRepr, &[u8])) -> Result<(), E>,
     {
@@ -653,7 +653,7 @@ impl<'a> Socket<'a> {
         Ok(())
     }
 
-    pub(crate) fn poll_at(&self, _cx: &Context) -> PollAt {
+    pub fn poll_at(&self, _cx: &Context) -> PollAt {
         self.queries
             .iter()
             .flatten()

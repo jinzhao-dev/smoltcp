@@ -3,7 +3,7 @@ use super::*;
 use crate::socket::tcp::Socket;
 
 impl InterfaceInner {
-    pub(crate) fn process_tcp<'frame>(
+    pub fn process_tcp<'frame>(
         &mut self,
         sockets: &mut SocketSet,
         ip_repr: IpRepr,

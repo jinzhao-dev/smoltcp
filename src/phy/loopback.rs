@@ -8,7 +8,7 @@ use crate::time::Instant;
 /// A loopback device.
 #[derive(Debug)]
 pub struct Loopback {
-    pub(crate) queue: VecDeque<Vec<u8>>,
+    pub queue: VecDeque<Vec<u8>>,
     medium: Medium,
 }
 

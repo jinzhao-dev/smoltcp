@@ -818,7 +818,7 @@ pub mod checksum {
     }
 
     // We use this in pretty printer implementations.
-    pub(crate) fn format_checksum(f: &mut fmt::Formatter, correct: bool) -> fmt::Result {
+    pub fn format_checksum(f: &mut fmt::Formatter, correct: bool) -> fmt::Result {
         if !correct {
             write!(f, " (checksum incorrect)")
         } else {
@@ -905,7 +905,7 @@ pub fn pretty_print_ip_payload<T: Into<Repr>>(
 }
 
 #[cfg(test)]
-pub(crate) mod test {
+pub mod test {
     #![allow(unused)]
 
     use super::*;

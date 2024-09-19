@@ -146,7 +146,7 @@ impl Routes {
         }
     }
 
-    pub(crate) fn lookup(&self, addr: &IpAddress, timestamp: Instant) -> Option<IpAddress> {
+    pub fn lookup(&self, addr: &IpAddress, timestamp: Instant) -> Option<IpAddress> {
         assert!(addr.is_unicast());
 
         self.storage
