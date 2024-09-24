@@ -122,8 +122,8 @@ pub struct Interface {
 /// methods on the `Interface` in this time (since its `device` field is borrowed
 /// exclusively). However, it is still possible to call methods on its `inner` field.
 pub struct InterfaceInner {
-    caps: DeviceCapabilities,
-    now: Instant,
+    pub caps: DeviceCapabilities,
+    pub now: Instant,
     rand: Rand,
 
     #[cfg(any(feature = "medium-ethernet", feature = "medium-ieee802154"))]
