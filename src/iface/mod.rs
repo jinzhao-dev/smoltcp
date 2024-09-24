@@ -14,7 +14,7 @@ mod rpl;
 mod socket_meta;
 mod socket_set;
 
-mod packet;
+pub mod packet;
 
 #[cfg(feature = "multicast")]
 pub use self::interface::multicast::MulticastError;
