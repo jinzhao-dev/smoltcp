@@ -933,11 +933,11 @@ impl InterfaceInner {
         }
     }
 
-    fn in_same_network(&self, addr: &IpAddress) -> bool {
+    pub fn in_same_network(&self, addr: &IpAddress) -> bool {
         self.ip_addrs.iter().any(|cidr| cidr.contains_addr(addr))
     }
 
-    fn route(&self, addr: &IpAddress, timestamp: Instant) -> Option<IpAddress> {
+    pub fn route(&self, addr: &IpAddress, timestamp: Instant) -> Option<IpAddress> {
         // Send directly.
         // note: no need to use `self.is_broadcast()` to check for subnet-local broadcast addrs
         //       here because `in_same_network` will already return true.
