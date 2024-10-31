@@ -25,7 +25,7 @@ impl InterfaceInner {
     /// # Panics
     /// This function panics if the destination address is unspecified.
     #[allow(unused)]
-    pub(crate) fn get_source_address_ipv6(&self, dst_addr: &Ipv6Address) -> Ipv6Address {
+    pub fn get_source_address_ipv6(&self, dst_addr: &Ipv6Address) -> Ipv6Address {
         assert!(!dst_addr.is_unspecified());
 
         // See RFC 6724 Section 4: Candidate source address

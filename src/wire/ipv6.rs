@@ -43,7 +43,7 @@ pub const LINK_LOCAL_ALL_RPL_NODES: Address = Address::new(0xff02, 0, 0, 0, 0, 0
 /// [scope]: https://www.rfc-editor.org/rfc/rfc4291#section-2.7
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub(crate) enum MulticastScope {
+pub enum MulticastScope {
     /// Interface Local scope
     InterfaceLocal = 0x1,
     /// Link local scope
@@ -76,7 +76,7 @@ impl From<u8> for MulticastScope {
 
 pub use core::net::Ipv6Addr as Address;
 
-pub(crate) trait AddressExt {
+pub trait AddressExt {
     /// Construct an IPv6 address from a sequence of octets, in big-endian.
     ///
     /// # Panics
@@ -661,20 +661,20 @@ impl<T: AsRef<[u8]>> PrettyPrint for Packet<T> {
 }
 
 #[cfg(test)]
-pub(crate) mod test {
+pub mod test {
     use super::*;
     use crate::wire::pretty_print::PrettyPrinter;
 
     #[allow(unused)]
-    pub(crate) const MOCK_IP_ADDR_1: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 1);
+    pub const MOCK_IP_ADDR_1: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 1);
     #[allow(unused)]
-    pub(crate) const MOCK_IP_ADDR_2: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 2);
+    pub const MOCK_IP_ADDR_2: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 2);
     #[allow(unused)]
-    pub(crate) const MOCK_IP_ADDR_3: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 3);
+    pub const MOCK_IP_ADDR_3: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 3);
     #[allow(unused)]
-    pub(crate) const MOCK_IP_ADDR_4: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 4);
+    pub const MOCK_IP_ADDR_4: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 4);
     #[allow(unused)]
-    pub(crate) const MOCK_UNSPECIFIED: Address = Address::UNSPECIFIED;
+    pub const MOCK_UNSPECIFIED: Address = Address::UNSPECIFIED;
 
     const LINK_LOCAL_ADDR: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 1);
     const UNIQUE_LOCAL_ADDR: Address = Address::new(0xfd00, 0, 0, 201, 1, 1, 1, 1);

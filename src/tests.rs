@@ -5,7 +5,7 @@ use crate::phy::{self, Device, DeviceCapabilities, Medium};
 use crate::time::Instant;
 use crate::wire::*;
 
-pub(crate) fn setup<'a>(medium: Medium) -> (Interface, SocketSet<'a>, TestingDevice) {
+pub fn setup<'a>(medium: Medium) -> (Interface, SocketSet<'a>, TestingDevice) {
     let mut device = TestingDevice::new(medium);
 
     let config = Config::new(match medium {
@@ -56,8 +56,8 @@ pub(crate) fn setup<'a>(medium: Medium) -> (Interface, SocketSet<'a>, TestingDev
 /// A testing device.
 #[derive(Debug)]
 pub struct TestingDevice {
-    pub(crate) tx_queue: VecDeque<Vec<u8>>,
-    pub(crate) rx_queue: VecDeque<Vec<u8>>,
+    pub tx_queue: VecDeque<Vec<u8>>,
+    pub rx_queue: VecDeque<Vec<u8>>,
     max_transmission_unit: usize,
     medium: Medium,
 }

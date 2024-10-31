@@ -30,10 +30,10 @@ enum NeighborState {
 /// itself.
 #[derive(Debug, Default)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub(crate) struct Meta {
+pub struct Meta {
     /// Handle of this socket within its enclosing `SocketSet`.
     /// Mainly useful for debug output.
-    pub(crate) handle: SocketHandle,
+    pub handle: SocketHandle,
     /// See [NeighborState](struct.NeighborState.html).
     neighbor_state: NeighborState,
 }
@@ -43,9 +43,9 @@ impl Meta {
     /// socket, in milliseconds.
     ///
     /// See also `iface::NeighborCache::SILENT_TIME`.
-    pub(crate) const DISCOVERY_SILENT_TIME: Duration = Duration::from_millis(1_000);
+    pub const DISCOVERY_SILENT_TIME: Duration = Duration::from_millis(1_000);
 
-    pub(crate) fn poll_at<F>(&self, socket_poll_at: PollAt, has_neighbor: F) -> PollAt
+    pub fn poll_at<F>(&self, socket_poll_at: PollAt, has_neighbor: F) -> PollAt
     where
         F: Fn(IpAddress) -> bool,
     {
@@ -56,7 +56,7 @@ impl Meta {
         }
     }
 
-    pub(crate) fn egress_permitted<F>(&mut self, timestamp: Instant, has_neighbor: F) -> bool
+    pub fn egress_permitted<F>(&mut self, timestamp: Instant, has_neighbor: F) -> bool
     where
         F: Fn(IpAddress) -> bool,
     {
@@ -88,7 +88,7 @@ impl Meta {
         }
     }
 
-    pub(crate) fn neighbor_missing(&mut self, timestamp: Instant, neighbor: IpAddress) {
+    pub fn neighbor_missing(&mut self, timestamp: Instant, neighbor: IpAddress) {
         net_trace!(
             "{}: neighbor {} missing, silencing until t+{}",
             self.handle,

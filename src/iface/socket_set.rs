@@ -19,9 +19,9 @@ impl<'a> SocketStorage<'a> {
 
 /// An item of a socket set.
 #[derive(Debug)]
-pub(crate) struct Item<'a> {
-    pub(crate) meta: Meta,
-    pub(crate) socket: Socket<'a>,
+pub struct Item<'a> {
+    pub meta: Meta,
+    pub socket: Socket<'a>,
 }
 
 /// A handle, identifying a socket in an Interface.
@@ -140,12 +140,12 @@ impl<'a> SocketSet<'a> {
     }
 
     /// Iterate every socket in this set.
-    pub(crate) fn items(&self) -> impl Iterator<Item = &Item<'a>> + '_ {
+    pub fn items(&self) -> impl Iterator<Item = &Item<'a>> + '_ {
         self.sockets.iter().filter_map(|x| x.inner.as_ref())
     }
 
     /// Iterate every socket in this set.
-    pub(crate) fn items_mut(&mut self) -> impl Iterator<Item = &mut Item<'a>> + '_ {
+    pub fn items_mut(&mut self) -> impl Iterator<Item = &mut Item<'a>> + '_ {
         self.sockets.iter_mut().filter_map(|x| x.inner.as_mut())
     }
 }

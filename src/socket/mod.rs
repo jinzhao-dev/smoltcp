@@ -31,12 +31,12 @@ pub mod udp;
 mod waker;
 
 #[cfg(feature = "async")]
-pub(crate) use self::waker::WakerRegistration;
+pub use self::waker::WakerRegistration;
 
 /// Gives an indication on the next time the socket should be polled.
 #[derive(Debug, PartialOrd, Ord, PartialEq, Eq, Clone, Copy)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub(crate) enum PollAt {
+pub enum PollAt {
     /// The socket needs to be polled immediately.
     Now,
     /// The socket needs to be polled at given [Instant][struct.Instant].
@@ -72,7 +72,7 @@ pub enum Socket<'a> {
 }
 
 impl<'a> Socket<'a> {
-    pub(crate) fn poll_at(&self, cx: &mut Context) -> PollAt {
+    pub fn poll_at(&self, cx: &mut Context) -> PollAt {
         match self {
             #[cfg(feature = "socket-raw")]
             Socket::Raw(s) => s.poll_at(cx),
