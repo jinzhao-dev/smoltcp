@@ -1548,6 +1548,7 @@ impl<'a> Socket<'a> {
                 net_debug!("expecting a SYN|ACK");
                 return None;
             }
+            (State::TimeWait, TcpControl::Syn, _) => {},
             // Every packet after the initial SYN must be an acknowledgement.
             (_, _, None) => {
                 net_debug!("expecting an ACK");
