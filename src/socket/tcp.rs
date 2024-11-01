@@ -1509,6 +1509,7 @@ impl<'a> Socket<'a> {
             (State::Listen, _, None) => (),
             // This case is handled in `accepts()`.
             (State::Listen, _, Some(_)) => unreachable!(),
+            (State::TimeWait, TcpControl::Syn, _) => (),
             // Every packet after the initial SYN must be an acknowledgement.
             (_, _, None) => {
                 net_debug!("expecting an ACK");
