@@ -1,4 +1,4 @@
-From 37716bff5ed5b16aba1b8a37e788ee5a6bf32cab Mon Sep 17 00:00:00 2001
+From bb2182f401d83f280cc9abf4a5a43d435d1e68ee Mon Sep 17 00:00:00 2001
 From: Ruihan Li <lrh2000@pku.edu.cn>
 Date: Thu, 26 Sep 2024 17:02:02 +0800
 Subject: [PATCH 4/4] Mark `InterfaceInner` methods as `pub`
@@ -8,10 +8,10 @@ Subject: [PATCH 4/4] Mark `InterfaceInner` methods as `pub`
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/src/iface/interface/mod.rs b/src/iface/interface/mod.rs
-index 8e8b4f1..20a4681 100644
+index e4d0720..a49fc2b 100644
 --- a/src/iface/interface/mod.rs
 +++ b/src/iface/interface/mod.rs
-@@ -845,11 +845,11 @@ impl InterfaceInner {
+@@ -933,11 +933,11 @@ impl InterfaceInner {
          }
      }
  

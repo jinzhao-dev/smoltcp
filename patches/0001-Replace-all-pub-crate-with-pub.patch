@@ -1,6 +1,6 @@
-From c69a2bfa9f0b9869c525343da892bce5fbe0971d Mon Sep 17 00:00:00 2001
+From 53c5760a2af9269c85cf153d85f5ab63825f3d72 Mon Sep 17 00:00:00 2001
 From: Ruihan Li <lrh2000@pku.edu.cn>
-Date: Thu, 19 Sep 2024 16:19:09 +0800
+Date: Mon, 4 Nov 2024 10:29:13 +0800
 Subject: [PATCH 1/4] Replace all `pub(crate)` with `pub`
 
 This commit is generated from the following command:
@@ -32,19 +32,19 @@ This commit is generated from the following command:
  src/socket/tcp.rs                | 12 +++++-----
  src/socket/udp.rs                |  8 +++----
  src/storage/packet_buffer.rs     |  2 +-
- src/tests.rs                     |  4 ++--
+ src/tests.rs                     |  6 ++---
  src/wire/dhcpv4.rs               |  2 +-
  src/wire/ip.rs                   |  4 ++--
- src/wire/ipv4.rs                 | 12 +++++-----
+ src/wire/ipv4.rs                 | 14 +++++------
  src/wire/ipv6.rs                 | 16 ++++++-------
- src/wire/mod.rs                  | 18 +++++++-------
+ src/wire/mod.rs                  | 20 ++++++++--------
  src/wire/sixlowpan/frag.rs       |  8 +++----
  src/wire/sixlowpan/nhc.rs        |  4 ++--
  src/wire/udp.rs                  |  2 +-
- 34 files changed, 172 insertions(+), 172 deletions(-)
+ 34 files changed, 175 insertions(+), 175 deletions(-)
 
 diff --git a/src/iface/fragmentation.rs b/src/iface/fragmentation.rs
-index ed00f17..66ec57c 100644
+index 16c84f4..37f8b67 100644
 --- a/src/iface/fragmentation.rs
 +++ b/src/iface/fragmentation.rs
 @@ -76,7 +76,7 @@ impl<K> PacketAssembler<K> {
@@ -82,7 +82,7 @@ index ed00f17..66ec57c 100644
 @@ -138,7 +138,7 @@ impl<K> PacketAssembler<K> {
      ///
      /// - Returns [`Error::PacketAssemblerBufferTooSmall`] when trying to add data into the buffer at a non-existing
-     /// place.
+     ///   place.
 -    pub(crate) fn add(&mut self, data: &[u8], offset: usize) -> Result<(), AssemblerError> {
 +    pub fn add(&mut self, data: &[u8], offset: usize) -> Result<(), AssemblerError> {
          #[cfg(not(feature = "alloc"))]
@@ -209,10 +209,10 @@ index ed00f17..66ec57c 100644
          self.sent_bytes = 0;
  
 diff --git a/src/iface/interface/ipv4.rs b/src/iface/interface/ipv4.rs
-index ef57665..f5d601d 100644
+index 7fda3ae..016de6e 100644
 --- a/src/iface/interface/ipv4.rs
 +++ b/src/iface/interface/ipv4.rs
-@@ -46,7 +46,7 @@ impl InterfaceInner {
+@@ -41,7 +41,7 @@ impl InterfaceInner {
      /// **NOTE**: unlike for IPv6, no specific selection algorithm is implemented. The first IPv4
      /// address from the interface is returned.
      #[allow(unused)]
@@ -221,7 +221,7 @@ index ef57665..f5d601d 100644
          for cidr in self.ip_addrs.iter() {
              #[allow(irrefutable_let_patterns)] // if only ipv4 is enabled
              if let IpCidr::Ipv4(cidr) = cidr {
-@@ -58,7 +58,7 @@ impl InterfaceInner {
+@@ -53,7 +53,7 @@ impl InterfaceInner {
  
      /// Checks if an address is broadcast, taking into account ipv4 subnet-local
      /// broadcast addresses.
@@ -231,7 +231,7 @@ index ef57665..f5d601d 100644
              return true;
          }
 diff --git a/src/iface/interface/ipv6.rs b/src/iface/interface/ipv6.rs
-index a8d29e4..af7b4e3 100644
+index 96e999f..6445b12 100644
 --- a/src/iface/interface/ipv6.rs
 +++ b/src/iface/interface/ipv6.rs
 @@ -25,7 +25,7 @@ impl InterfaceInner {
@@ -244,7 +244,7 @@ index a8d29e4..af7b4e3 100644
  
          // See RFC 6724 Section 4: Candidate source address
 diff --git a/src/iface/interface/mod.rs b/src/iface/interface/mod.rs
-index c850d3c..5962ba9 100644
+index 4df6d73..4570069 100644
 --- a/src/iface/interface/mod.rs
 +++ b/src/iface/interface/mod.rs
 @@ -18,7 +18,7 @@ mod ipv6;
@@ -256,7 +256,7 @@ index c850d3c..5962ba9 100644
  #[cfg(feature = "socket-tcp")]
  mod tcp;
  #[cfg(any(feature = "socket-udp", feature = "socket-dns"))]
-@@ -71,7 +71,7 @@ use check;
+@@ -109,7 +109,7 @@ pub enum PollIngressSingleResult {
  /// a dependency on heap allocation, it instead owns a `BorrowMut<[T]>`, which can be
  /// a `&mut [T]`, or `Vec<T>` if a heap is available.
  pub struct Interface {
@@ -265,7 +265,7 @@ index c850d3c..5962ba9 100644
      fragments: FragmentsBuffer,
      fragmenter: Fragmenter,
  }
-@@ -669,33 +669,33 @@ impl Interface {
+@@ -757,33 +757,33 @@ impl Interface {
  
  impl InterfaceInner {
      #[allow(unused)] // unused depending on which sockets are enabled
@@ -305,7 +305,7 @@ index c850d3c..5962ba9 100644
          match dst_addr {
              #[cfg(feature = "proto-ipv4")]
              IpAddress::Ipv4(addr) => self.get_source_address_ipv4(addr).map(|a| a.into()),
-@@ -706,7 +706,7 @@ impl InterfaceInner {
+@@ -794,7 +794,7 @@ impl InterfaceInner {
  
      #[cfg(test)]
      #[allow(unused)] // unused depending on which sockets are enabled
@@ -314,7 +314,7 @@ index c850d3c..5962ba9 100644
          self.now = now
      }
  
-@@ -802,7 +802,7 @@ impl InterfaceInner {
+@@ -890,7 +890,7 @@ impl InterfaceInner {
  
      /// Checks if an address is broadcast, taking into account ipv4 subnet-local
      /// broadcast addresses.
@@ -324,7 +324,7 @@ index c850d3c..5962ba9 100644
              #[cfg(feature = "proto-ipv4")]
              IpAddress::Ipv4(address) => self.is_broadcast_v4(*address),
 diff --git a/src/iface/interface/multicast.rs b/src/iface/interface/multicast.rs
-index d66ba4d..3f1ebfd 100644
+index 68b1c77..1d31429 100644
 --- a/src/iface/interface/multicast.rs
 +++ b/src/iface/interface/multicast.rs
 @@ -19,7 +19,7 @@ pub enum MulticastError {
@@ -367,13 +367,13 @@ index d66ba4d..3f1ebfd 100644
      /// - Send join/leave packets according to the multicast group state.
      /// - Depending on `igmp_report_state` and the therein contained
      ///   timeouts, send IGMP membership reports.
--    pub(crate) fn multicast_egress<D>(&mut self, device: &mut D)
-+    pub fn multicast_egress<D>(&mut self, device: &mut D)
-     where
-         D: Device + ?Sized,
-     {
+-    pub(crate) fn multicast_egress(&mut self, device: &mut (impl Device + ?Sized)) {
++    pub fn multicast_egress(&mut self, device: &mut (impl Device + ?Sized)) {
+         // Process multicast joins.
+         while let Some((&addr, _)) = self
+             .inner
 diff --git a/src/iface/interface/sixlowpan.rs b/src/iface/interface/sixlowpan.rs
-index a89934f..2aba996 100644
+index d5e3caf..a0cf146 100644
 --- a/src/iface/interface/sixlowpan.rs
 +++ b/src/iface/interface/sixlowpan.rs
 @@ -3,7 +3,7 @@ use crate::wire::Result;
@@ -588,7 +588,7 @@ index 1ccc676..8ed4c9f 100644
      // the minimum MTU required by IPv4. See RFC 1812 § 4.3.2.3 for
      // more details.
 diff --git a/src/iface/route.rs b/src/iface/route.rs
-index 123c695..a96eece 100644
+index f14a57d..7f43d72 100644
 --- a/src/iface/route.rs
 +++ b/src/iface/route.rs
 @@ -146,7 +146,7 @@ impl Routes {
@@ -601,7 +601,7 @@ index 123c695..a96eece 100644
  
          self.storage
 diff --git a/src/iface/rpl/of0.rs b/src/iface/rpl/of0.rs
-index 99e4d1f..be858aa 100644
+index 299938f..9d75326 100644
 --- a/src/iface/rpl/of0.rs
 +++ b/src/iface/rpl/of0.rs
 @@ -3,7 +3,7 @@ use super::rank::Rank;
@@ -614,7 +614,7 @@ index 99e4d1f..be858aa 100644
  
      /// Return the new calculated Rank, based on information from the parent.
 diff --git a/src/iface/rpl/parents.rs b/src/iface/rpl/parents.rs
-index 70d5a5e..f7c8cbc 100644
+index 7d4d60e..ae72151 100644
 --- a/src/iface/rpl/parents.rs
 +++ b/src/iface/rpl/parents.rs
 @@ -4,7 +4,7 @@ use super::{lollipop::SequenceCounter, rank::Rank};
@@ -906,10 +906,10 @@ index 15d88f7..27ad09a 100644
              let res = self.rand_u16();
              if res > 1024 {
 diff --git a/src/socket/dhcpv4.rs b/src/socket/dhcpv4.rs
-index b1b3cb5..ef02eb7 100644
+index 72980a9..31beed8 100644
 --- a/src/socket/dhcpv4.rs
 +++ b/src/socket/dhcpv4.rs
-@@ -168,10 +168,10 @@ pub struct Socket<'a> {
+@@ -169,10 +169,10 @@ pub struct Socket<'a> {
      ignore_naks: bool,
  
      /// Server port config
@@ -922,7 +922,7 @@ index b1b3cb5..ef02eb7 100644
  
      /// A buffer contains options additional to be added to outgoing DHCP
      /// packets.
-@@ -287,7 +287,7 @@ impl<'a> Socket<'a> {
+@@ -288,7 +288,7 @@ impl<'a> Socket<'a> {
          self.client_port = client_port;
      }
  
@@ -931,7 +931,7 @@ index b1b3cb5..ef02eb7 100644
          let t = match &self.state {
              ClientState::Discovering(state) => state.retry_at,
              ClientState::Requesting(state) => state.retry_at,
-@@ -301,7 +301,7 @@ impl<'a> Socket<'a> {
+@@ -302,7 +302,7 @@ impl<'a> Socket<'a> {
          PollAt::Time(t)
      }
  
@@ -940,7 +940,7 @@ index b1b3cb5..ef02eb7 100644
          &mut self,
          cx: &mut Context,
          ip_repr: &Ipv4Repr,
-@@ -547,7 +547,7 @@ impl<'a> Socket<'a> {
+@@ -548,7 +548,7 @@ impl<'a> Socket<'a> {
          0x12345678
      }
  
@@ -949,7 +949,7 @@ index b1b3cb5..ef02eb7 100644
      where
          F: FnOnce(&mut Context, (Ipv4Repr, UdpRepr, DhcpRepr)) -> Result<(), E>,
      {
-@@ -753,7 +753,7 @@ impl<'a> Socket<'a> {
+@@ -754,7 +754,7 @@ impl<'a> Socket<'a> {
      /// This function _must_ be called when the configuration provided to the
      /// interface, by this DHCP socket, changes. It will update the `config_changed` field
      /// so that a subsequent call to `poll` will yield an event, and wake a possible waker.
@@ -959,7 +959,7 @@ index b1b3cb5..ef02eb7 100644
          #[cfg(feature = "async")]
          self.waker.wake();
 diff --git a/src/socket/dns.rs b/src/socket/dns.rs
-index abb0f0c..0f02e2e 100644
+index 681cf10..9e034c2 100644
 --- a/src/socket/dns.rs
 +++ b/src/socket/dns.rs
 @@ -368,7 +368,7 @@ impl<'a> Socket<'a> {
@@ -999,10 +999,10 @@ index abb0f0c..0f02e2e 100644
              .iter()
              .flatten()
 diff --git a/src/socket/icmp.rs b/src/socket/icmp.rs
-index 85a34b1..efcafba 100644
+index dee3416..091e07d 100644
 --- a/src/socket/icmp.rs
 +++ b/src/socket/icmp.rs
-@@ -416,7 +416,7 @@ impl<'a> Socket<'a> {
+@@ -426,7 +426,7 @@ impl<'a> Socket<'a> {
      /// Accepted packets are enqueued into the socket's receive buffer.
      #[cfg(feature = "proto-ipv4")]
      #[inline]
@@ -1011,7 +1011,7 @@ index 85a34b1..efcafba 100644
          &self,
          cx: &mut Context,
          ip_repr: &Ipv4Repr,
-@@ -458,7 +458,7 @@ impl<'a> Socket<'a> {
+@@ -468,7 +468,7 @@ impl<'a> Socket<'a> {
      /// Accepted packets are enqueued into the socket's receive buffer.
      #[cfg(feature = "proto-ipv6")]
      #[inline]
@@ -1020,7 +1020,7 @@ index 85a34b1..efcafba 100644
          &self,
          cx: &mut Context,
          ip_repr: &Ipv6Repr,
-@@ -497,7 +497,7 @@ impl<'a> Socket<'a> {
+@@ -507,7 +507,7 @@ impl<'a> Socket<'a> {
      }
  
      #[cfg(feature = "proto-ipv4")]
@@ -1029,7 +1029,7 @@ index 85a34b1..efcafba 100644
          &mut self,
          _cx: &mut Context,
          ip_repr: &Ipv4Repr,
-@@ -523,7 +523,7 @@ impl<'a> Socket<'a> {
+@@ -533,7 +533,7 @@ impl<'a> Socket<'a> {
      }
  
      #[cfg(feature = "proto-ipv6")]
@@ -1038,7 +1038,7 @@ index 85a34b1..efcafba 100644
          &mut self,
          _cx: &mut Context,
          ip_repr: &Ipv6Repr,
-@@ -548,7 +548,7 @@ impl<'a> Socket<'a> {
+@@ -558,7 +558,7 @@ impl<'a> Socket<'a> {
          self.rx_waker.wake();
      }
  
@@ -1047,7 +1047,7 @@ index 85a34b1..efcafba 100644
      where
          F: FnOnce(&mut Context, (IpRepr, IcmpRepr)) -> Result<(), E>,
      {
-@@ -634,7 +634,7 @@ impl<'a> Socket<'a> {
+@@ -644,7 +644,7 @@ impl<'a> Socket<'a> {
          }
      }
  
@@ -1085,11 +1085,11 @@ index 7d48b42..9681f08 100644
              #[cfg(feature = "socket-raw")]
              Socket::Raw(s) => s.poll_at(cx),
 diff --git a/src/socket/raw.rs b/src/socket/raw.rs
-index bb3a204..df6355b 100644
+index c79f99b..cb655af 100644
 --- a/src/socket/raw.rs
 +++ b/src/socket/raw.rs
-@@ -327,7 +327,7 @@ impl<'a> Socket<'a> {
-         Ok(length)
+@@ -337,7 +337,7 @@ impl<'a> Socket<'a> {
+         self.rx_buffer.payload_bytes_count()
      }
  
 -    pub(crate) fn accepts(&self, ip_repr: &IpRepr) -> bool {
@@ -1097,7 +1097,7 @@ index bb3a204..df6355b 100644
          if ip_repr.version() != self.ip_version {
              return false;
          }
-@@ -338,7 +338,7 @@ impl<'a> Socket<'a> {
+@@ -348,7 +348,7 @@ impl<'a> Socket<'a> {
          true
      }
  
@@ -1106,7 +1106,7 @@ index bb3a204..df6355b 100644
          debug_assert!(self.accepts(ip_repr));
  
          let header_len = ip_repr.header_len();
-@@ -367,7 +367,7 @@ impl<'a> Socket<'a> {
+@@ -377,7 +377,7 @@ impl<'a> Socket<'a> {
          self.rx_waker.wake();
      }
  
@@ -1115,7 +1115,7 @@ index bb3a204..df6355b 100644
      where
          F: FnOnce(&mut Context, (IpRepr, &[u8])) -> Result<(), E>,
      {
-@@ -450,7 +450,7 @@ impl<'a> Socket<'a> {
+@@ -460,7 +460,7 @@ impl<'a> Socket<'a> {
          }
      }
  
@@ -1125,10 +1125,10 @@ index bb3a204..df6355b 100644
              PollAt::Ingress
          } else {
 diff --git a/src/socket/tcp.rs b/src/socket/tcp.rs
-index f944875..848c860 100644
+index d50631d..5a80ad3 100644
 --- a/src/socket/tcp.rs
 +++ b/src/socket/tcp.rs
-@@ -1324,7 +1324,7 @@ impl<'a> Socket<'a> {
+@@ -1329,7 +1329,7 @@ impl<'a> Socket<'a> {
          }
      }
  
@@ -1137,7 +1137,7 @@ index f944875..848c860 100644
          let reply_repr = TcpRepr {
              src_port: repr.dst_port,
              dst_port: repr.src_port,
-@@ -1349,7 +1349,7 @@ impl<'a> Socket<'a> {
+@@ -1354,7 +1354,7 @@ impl<'a> Socket<'a> {
          (ip_reply_repr, reply_repr)
      }
  
@@ -1146,7 +1146,7 @@ index f944875..848c860 100644
          debug_assert!(repr.control != TcpControl::Rst);
  
          let (ip_reply_repr, mut reply_repr) = Self::reply(ip_repr, repr);
-@@ -1441,7 +1441,7 @@ impl<'a> Socket<'a> {
+@@ -1446,7 +1446,7 @@ impl<'a> Socket<'a> {
          Some(self.ack_reply(ip_repr, repr))
      }
  
@@ -1155,7 +1155,7 @@ index f944875..848c860 100644
          if self.state == State::Closed {
              return false;
          }
-@@ -1469,7 +1469,7 @@ impl<'a> Socket<'a> {
+@@ -1474,7 +1474,7 @@ impl<'a> Socket<'a> {
          }
      }
  
@@ -1164,7 +1164,7 @@ index f944875..848c860 100644
          &mut self,
          cx: &mut Context,
          ip_repr: &IpRepr,
-@@ -2207,7 +2207,7 @@ impl<'a> Socket<'a> {
+@@ -2247,7 +2247,7 @@ impl<'a> Socket<'a> {
          }
      }
  
@@ -1173,7 +1173,7 @@ index f944875..848c860 100644
      where
          F: FnOnce(&mut Context, (IpRepr, TcpRepr)) -> Result<(), E>,
      {
-@@ -2508,7 +2508,7 @@ impl<'a> Socket<'a> {
+@@ -2549,7 +2549,7 @@ impl<'a> Socket<'a> {
      }
  
      #[allow(clippy::if_same_then_else)]
@@ -1183,11 +1183,11 @@ index f944875..848c860 100644
          if self.tuple.is_none() {
              // No one to talk to, nothing to transmit.
 diff --git a/src/socket/udp.rs b/src/socket/udp.rs
-index 269043e..596ab98 100644
+index 1e09116..1b1f9a1 100644
 --- a/src/socket/udp.rs
 +++ b/src/socket/udp.rs
-@@ -459,7 +459,7 @@ impl<'a> Socket<'a> {
-         Ok((length, endpoint))
+@@ -475,7 +475,7 @@ impl<'a> Socket<'a> {
+         self.rx_buffer.payload_bytes_count()
      }
  
 -    pub(crate) fn accepts(&self, cx: &mut Context, ip_repr: &IpRepr, repr: &UdpRepr) -> bool {
@@ -1195,7 +1195,7 @@ index 269043e..596ab98 100644
          if self.endpoint.port != repr.dst_port {
              return false;
          }
-@@ -474,7 +474,7 @@ impl<'a> Socket<'a> {
+@@ -490,7 +490,7 @@ impl<'a> Socket<'a> {
          true
      }
  
@@ -1204,7 +1204,7 @@ index 269043e..596ab98 100644
          &mut self,
          cx: &mut Context,
          meta: PacketMeta,
-@@ -517,7 +517,7 @@ impl<'a> Socket<'a> {
+@@ -533,7 +533,7 @@ impl<'a> Socket<'a> {
          self.rx_waker.wake();
      }
  
@@ -1213,7 +1213,7 @@ index 269043e..596ab98 100644
      where
          F: FnOnce(&mut Context, PacketMeta, (IpRepr, UdpRepr, &[u8])) -> Result<(), E>,
      {
-@@ -576,7 +576,7 @@ impl<'a> Socket<'a> {
+@@ -592,7 +592,7 @@ impl<'a> Socket<'a> {
          }
      }
  
@@ -1223,10 +1223,10 @@ index 269043e..596ab98 100644
              PollAt::Ingress
          } else {
 diff --git a/src/storage/packet_buffer.rs b/src/storage/packet_buffer.rs
-index 28119fa..1f2b5f8 100644
+index f9121e6..339916c 100644
 --- a/src/storage/packet_buffer.rs
 +++ b/src/storage/packet_buffer.rs
-@@ -241,7 +241,7 @@ impl<'a, H> PacketBuffer<'a, H> {
+@@ -246,7 +246,7 @@ impl<'a, H> PacketBuffer<'a, H> {
  
      /// Reset the packet buffer and clear any staged.
      #[allow(unused)]
@@ -1236,11 +1236,11 @@ index 28119fa..1f2b5f8 100644
          self.metadata_ring.clear();
      }
 diff --git a/src/tests.rs b/src/tests.rs
-index b9eb740..a0b3000 100644
+index 165bd52..dffc678 100644
 --- a/src/tests.rs
 +++ b/src/tests.rs
-@@ -1,7 +1,7 @@
- use crate::iface::*;
+@@ -5,7 +5,7 @@ use crate::phy::{self, Device, DeviceCapabilities, Medium};
+ use crate::time::Instant;
  use crate::wire::*;
  
 -pub(crate) fn setup<'a>(medium: Medium) -> (Interface, SocketSet<'a>, TestingDevice) {
@@ -1248,17 +1248,19 @@ index b9eb740..a0b3000 100644
      let mut device = TestingDevice::new(medium);
  
      let config = Config::new(match medium {
-@@ -58,7 +58,7 @@ use crate::time::Instant;
+@@ -56,8 +56,8 @@ pub(crate) fn setup<'a>(medium: Medium) -> (Interface, SocketSet<'a>, TestingDev
  /// A testing device.
  #[derive(Debug)]
  pub struct TestingDevice {
--    pub(crate) queue: Deque<Vec<u8, 1514>, 4>,
-+    pub queue: Deque<Vec<u8, 1514>, 4>,
+-    pub(crate) tx_queue: VecDeque<Vec<u8>>,
+-    pub(crate) rx_queue: VecDeque<Vec<u8>>,
++    pub tx_queue: VecDeque<Vec<u8>>,
++    pub rx_queue: VecDeque<Vec<u8>>,
      max_transmission_unit: usize,
      medium: Medium,
  }
 diff --git a/src/wire/dhcpv4.rs b/src/wire/dhcpv4.rs
-index b00f26f..de8672f 100644
+index 87ace13..0f2c634 100644
 --- a/src/wire/dhcpv4.rs
 +++ b/src/wire/dhcpv4.rs
 @@ -117,7 +117,7 @@ pub struct Packet<T: AsRef<[u8]>> {
@@ -1271,10 +1273,10 @@ index b00f26f..de8672f 100644
      #![allow(unused)]
  
 diff --git a/src/wire/ip.rs b/src/wire/ip.rs
-index 1d1c63d..6ed9e3b 100644
+index e61541c..b8cd0f4 100644
 --- a/src/wire/ip.rs
 +++ b/src/wire/ip.rs
-@@ -818,7 +818,7 @@ pub mod checksum {
+@@ -779,7 +779,7 @@ pub mod checksum {
      }
  
      // We use this in pretty printer implementations.
@@ -1283,7 +1285,7 @@ index 1d1c63d..6ed9e3b 100644
          if !correct {
              write!(f, " (checksum incorrect)")
          } else {
-@@ -905,7 +905,7 @@ pub fn pretty_print_ip_payload<T: Into<Repr>>(
+@@ -866,7 +866,7 @@ pub fn pretty_print_ip_payload<T: Into<Repr>>(
  }
  
  #[cfg(test)]
@@ -1293,10 +1295,19 @@ index 1d1c63d..6ed9e3b 100644
  
      use super::*;
 diff --git a/src/wire/ipv4.rs b/src/wire/ipv4.rs
-index b5f7894..c9c6408 100644
+index 7629a46..6ed9699 100644
 --- a/src/wire/ipv4.rs
 +++ b/src/wire/ipv4.rs
-@@ -791,19 +791,19 @@ impl<T: AsRef<[u8]>> PrettyPrint for Packet<T> {
+@@ -43,7 +43,7 @@ pub struct Key {
+ 
+ pub use core::net::Ipv4Addr as Address;
+ 
+-pub(crate) trait AddressExt {
++pub trait AddressExt {
+     /// Construct an IPv4 address from a sequence of octets, in big-endian.
+     ///
+     /// # Panics
+@@ -717,19 +717,19 @@ impl<T: AsRef<[u8]>> PrettyPrint for Packet<T> {
  }
  
  #[cfg(test)]
@@ -1305,17 +1316,17 @@ index b5f7894..c9c6408 100644
      use super::*;
  
      #[allow(unused)]
--    pub(crate) const MOCK_IP_ADDR_1: Address = Address([192, 168, 1, 1]);
-+    pub const MOCK_IP_ADDR_1: Address = Address([192, 168, 1, 1]);
+-    pub(crate) const MOCK_IP_ADDR_1: Address = Address::new(192, 168, 1, 1);
++    pub const MOCK_IP_ADDR_1: Address = Address::new(192, 168, 1, 1);
      #[allow(unused)]
--    pub(crate) const MOCK_IP_ADDR_2: Address = Address([192, 168, 1, 2]);
-+    pub const MOCK_IP_ADDR_2: Address = Address([192, 168, 1, 2]);
+-    pub(crate) const MOCK_IP_ADDR_2: Address = Address::new(192, 168, 1, 2);
++    pub const MOCK_IP_ADDR_2: Address = Address::new(192, 168, 1, 2);
      #[allow(unused)]
--    pub(crate) const MOCK_IP_ADDR_3: Address = Address([192, 168, 1, 3]);
-+    pub const MOCK_IP_ADDR_3: Address = Address([192, 168, 1, 3]);
+-    pub(crate) const MOCK_IP_ADDR_3: Address = Address::new(192, 168, 1, 3);
++    pub const MOCK_IP_ADDR_3: Address = Address::new(192, 168, 1, 3);
      #[allow(unused)]
--    pub(crate) const MOCK_IP_ADDR_4: Address = Address([192, 168, 1, 4]);
-+    pub const MOCK_IP_ADDR_4: Address = Address([192, 168, 1, 4]);
+-    pub(crate) const MOCK_IP_ADDR_4: Address = Address::new(192, 168, 1, 4);
++    pub const MOCK_IP_ADDR_4: Address = Address::new(192, 168, 1, 4);
      #[allow(unused)]
 -    pub(crate) const MOCK_UNSPECIFIED: Address = Address::UNSPECIFIED;
 +    pub const MOCK_UNSPECIFIED: Address = Address::UNSPECIFIED;
@@ -1323,10 +1334,10 @@ index b5f7894..c9c6408 100644
      static PACKET_BYTES: [u8; 30] = [
          0x45, 0x00, 0x00, 0x1e, 0x01, 0x02, 0x62, 0x03, 0x1a, 0x01, 0xd5, 0x6e, 0x11, 0x12, 0x13,
 diff --git a/src/wire/ipv6.rs b/src/wire/ipv6.rs
-index e13c8ed..f003cc6 100644
+index 8dc05c5..b454842 100644
 --- a/src/wire/ipv6.rs
 +++ b/src/wire/ipv6.rs
-@@ -30,7 +30,7 @@ pub const IPV4_MAPPED_PREFIX_SIZE: usize = ADDR_SIZE - 4; // 4 == ipv4::ADDR_SIZ
+@@ -43,7 +43,7 @@ pub const LINK_LOCAL_ALL_RPL_NODES: Address = Address::new(0xff02, 0, 0, 0, 0, 0
  /// [scope]: https://www.rfc-editor.org/rfc/rfc4291#section-2.7
  #[repr(u8)]
  #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -1335,43 +1346,36 @@ index e13c8ed..f003cc6 100644
      /// Interface Local scope
      InterfaceLocal = 0x1,
      /// Link local scope
-@@ -288,7 +288,7 @@ impl Address {
-     }
+@@ -76,7 +76,7 @@ impl From<u8> for MulticastScope {
  
-     /// Return the scope of the address.
--    pub(crate) fn multicast_scope(&self) -> MulticastScope {
-+    pub fn multicast_scope(&self) -> MulticastScope {
-         if self.is_multicast() {
-             return MulticastScope::from(self.as_bytes()[1] & 0b1111);
-         }
-@@ -903,7 +903,7 @@ impl<T: AsRef<[u8]>> PrettyPrint for Packet<T> {
+ pub use core::net::Ipv6Addr as Address;
+ 
+-pub(crate) trait AddressExt {
++pub trait AddressExt {
+     /// Construct an IPv6 address from a sequence of octets, in big-endian.
+     ///
+     /// # Panics
+@@ -661,20 +661,20 @@ impl<T: AsRef<[u8]>> PrettyPrint for Packet<T> {
  }
  
  #[cfg(test)]
 -pub(crate) mod test {
 +pub mod test {
-     use super::Error;
-     use super::{Address, Cidr};
-     use super::{Packet, Protocol, Repr};
-@@ -913,19 +913,19 @@ pub(crate) mod test {
-     use crate::wire::ipv4::Address as Ipv4Address;
+     use super::*;
+     use crate::wire::pretty_print::PrettyPrinter;
  
      #[allow(unused)]
--    pub(crate) const MOCK_IP_ADDR_1: Address =
-+    pub const MOCK_IP_ADDR_1: Address =
-         Address([0xfe, 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]);
+-    pub(crate) const MOCK_IP_ADDR_1: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 1);
++    pub const MOCK_IP_ADDR_1: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 1);
      #[allow(unused)]
--    pub(crate) const MOCK_IP_ADDR_2: Address =
-+    pub const MOCK_IP_ADDR_2: Address =
-         Address([0xfe, 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2]);
+-    pub(crate) const MOCK_IP_ADDR_2: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 2);
++    pub const MOCK_IP_ADDR_2: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 2);
      #[allow(unused)]
--    pub(crate) const MOCK_IP_ADDR_3: Address =
-+    pub const MOCK_IP_ADDR_3: Address =
-         Address([0xfe, 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3]);
+-    pub(crate) const MOCK_IP_ADDR_3: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 3);
++    pub const MOCK_IP_ADDR_3: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 3);
      #[allow(unused)]
--    pub(crate) const MOCK_IP_ADDR_4: Address =
-+    pub const MOCK_IP_ADDR_4: Address =
-         Address([0xfe, 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4]);
+-    pub(crate) const MOCK_IP_ADDR_4: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 4);
++    pub const MOCK_IP_ADDR_4: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 4);
      #[allow(unused)]
 -    pub(crate) const MOCK_UNSPECIFIED: Address = Address::UNSPECIFIED;
 +    pub const MOCK_UNSPECIFIED: Address = Address::UNSPECIFIED;
@@ -1379,7 +1383,7 @@ index e13c8ed..f003cc6 100644
      const LINK_LOCAL_ADDR: Address = Address::new(0xfe80, 0, 0, 0, 0, 0, 0, 1);
      const UNIQUE_LOCAL_ADDR: Address = Address::new(0xfd00, 0, 0, 201, 1, 1, 1, 1);
 diff --git a/src/wire/mod.rs b/src/wire/mod.rs
-index 64ac653..e6c2fd8 100644
+index a6db11c..bb3ad22 100644
 --- a/src/wire/mod.rs
 +++ b/src/wire/mod.rs
 @@ -80,9 +80,9 @@ pub mod pretty_print;
@@ -1409,16 +1413,25 @@ index 64ac653..e6c2fd8 100644
  #[cfg(feature = "proto-ipv6")]
  mod ipv6ext_header;
  #[cfg(feature = "proto-ipv6")]
-@@ -191,7 +191,7 @@ pub use self::ipv4::{
+@@ -193,7 +193,7 @@ pub use self::ipv4::{
  };
  
- #[cfg(feature = "proto-ipv6")]
--pub(crate) use self::ipv6::MulticastScope as Ipv6MulticastScope;
-+pub use self::ipv6::MulticastScope as Ipv6MulticastScope;
+ #[cfg(feature = "proto-ipv4")]
+-pub(crate) use self::ipv4::AddressExt as Ipv4AddressExt;
++pub use self::ipv4::AddressExt as Ipv4AddressExt;
+ 
  #[cfg(feature = "proto-ipv6")]
  pub use self::ipv6::{
-     Address as Ipv6Address, Cidr as Ipv6Cidr, Packet as Ipv6Packet, Repr as Ipv6Repr,
-@@ -389,7 +389,7 @@ impl HardwareAddress {
+@@ -205,7 +205,7 @@ pub use self::ipv6::{
+     LINK_LOCAL_ALL_RPL_NODES as IPV6_LINK_LOCAL_ALL_RPL_NODES, MIN_MTU as IPV6_MIN_MTU,
+ };
+ #[cfg(feature = "proto-ipv6")]
+-pub(crate) use self::ipv6::{AddressExt as Ipv6AddressExt, MulticastScope as Ipv6MulticastScope};
++pub use self::ipv6::{AddressExt as Ipv6AddressExt, MulticastScope as Ipv6MulticastScope};
+ 
+ #[cfg(feature = "proto-ipv6")]
+ pub use self::ipv6option::{
+@@ -398,7 +398,7 @@ impl HardwareAddress {
      }
  
      #[cfg(feature = "medium-ethernet")]
@@ -1427,7 +1440,7 @@ index 64ac653..e6c2fd8 100644
          match self {
              HardwareAddress::Ethernet(addr) => *addr,
              #[allow(unreachable_patterns)]
-@@ -398,7 +398,7 @@ impl HardwareAddress {
+@@ -407,7 +407,7 @@ impl HardwareAddress {
      }
  
      #[cfg(feature = "medium-ieee802154")]
@@ -1436,7 +1449,7 @@ index 64ac653..e6c2fd8 100644
          match self {
              HardwareAddress::Ieee802154(addr) => *addr,
              #[allow(unreachable_patterns)]
-@@ -407,7 +407,7 @@ impl HardwareAddress {
+@@ -416,7 +416,7 @@ impl HardwareAddress {
      }
  
      #[inline]
@@ -1465,7 +1478,7 @@ index eed7f05..4eaf9b2 100644
  
  /// A read/write wrapper around a 6LoWPAN Fragment header.
 diff --git a/src/wire/sixlowpan/nhc.rs b/src/wire/sixlowpan/nhc.rs
-index 85e422a..b9574f1 100644
+index d558d1d..52458b2 100644
 --- a/src/wire/sixlowpan/nhc.rs
 +++ b/src/wire/sixlowpan/nhc.rs
 @@ -591,7 +591,7 @@ impl<T: AsRef<[u8]>> UdpNhcPacket<T> {
@@ -1487,7 +1500,7 @@ index 85e422a..b9574f1 100644
              0b00 => 4, // 16 bits + 16 bits
              0b01 => 3, // 16 bits + 8 bits
 diff --git a/src/wire/udp.rs b/src/wire/udp.rs
-index d7ad0d4..2e65541 100644
+index 9d341e0..78b460f 100644
 --- a/src/wire/udp.rs
 +++ b/src/wire/udp.rs
 @@ -255,7 +255,7 @@ impl Repr {

@@ -1,4 +1,4 @@
-From b23fd12039dc438b57cdfac9001641fc5878f67a Mon Sep 17 00:00:00 2001
+From 718996685c2fd0dd3dfc67a0db48e0d35d11ab52 Mon Sep 17 00:00:00 2001
 From: Ruihan Li <lrh2000@pku.edu.cn>
 Date: Tue, 24 Sep 2024 17:31:54 +0800
 Subject: [PATCH 2/4] Mark `iface::packet` as `pub`
@@ -8,7 +8,7 @@ Subject: [PATCH 2/4] Mark `iface::packet` as `pub`
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/iface/mod.rs b/src/iface/mod.rs
-index 8abcbd6..40c57bf 100644
+index 5b028d0..31bd380 100644
 --- a/src/iface/mod.rs
 +++ b/src/iface/mod.rs
 @@ -14,7 +14,7 @@ mod rpl;
