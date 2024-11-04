@@ -19,7 +19,7 @@ pub enum MulticastError {
 }
 
 #[cfg(feature = "proto-ipv4")]
-pub(crate) enum IgmpReportState {
+pub enum IgmpReportState {
     Inactive,
     ToGeneralQuery {
         version: IgmpVersion,
@@ -44,7 +44,7 @@ enum GroupState {
     Leaving,
 }
 
-pub(crate) struct State {
+pub struct State {
     groups: LinearMap<IpAddress, GroupState, IFACE_MAX_MULTICAST_GROUP_COUNT>,
     /// When to report for (all or) the next multicast group membership via IGMP
     #[cfg(feature = "proto-ipv4")]
@@ -52,7 +52,7 @@ pub(crate) struct State {
 }
 
 impl State {
-    pub(crate) fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             groups: LinearMap::new(),
             #[cfg(feature = "proto-ipv4")]
@@ -60,7 +60,7 @@ impl State {
         }
     }
 
-    pub(crate) fn has_multicast_group<T: Into<IpAddress>>(&self, addr: T) -> bool {
+    pub fn has_multicast_group<T: Into<IpAddress>>(&self, addr: T) -> bool {
         // Return false if we don't have the multicast group,
         // or we're leaving it.
         match self.groups.get(&addr.into()) {
@@ -145,7 +145,7 @@ impl Interface {
     /// - Send join/leave packets according to the multicast group state.
     /// - Depending on `igmp_report_state` and the therein contained
     ///   timeouts, send IGMP membership reports.
-    pub(crate) fn multicast_egress(&mut self, device: &mut (impl Device + ?Sized)) {
+    pub fn multicast_egress(&mut self, device: &mut (impl Device + ?Sized)) {
         // Process multicast joins.
         while let Some((&addr, _)) = self
             .inner

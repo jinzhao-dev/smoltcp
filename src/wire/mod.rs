@@ -80,9 +80,9 @@ pub mod pretty_print;
 #[cfg(all(feature = "proto-ipv4", feature = "medium-ethernet"))]
 mod arp;
 #[cfg(feature = "proto-dhcpv4")]
-pub(crate) mod dhcpv4;
+pub mod dhcpv4;
 #[cfg(feature = "proto-dns")]
-pub(crate) mod dns;
+pub mod dns;
 #[cfg(feature = "medium-ethernet")]
 mod ethernet;
 #[cfg(any(feature = "proto-ipv4", feature = "proto-ipv6"))]
@@ -95,11 +95,11 @@ mod icmpv6;
 pub mod ieee802154;
 #[cfg(feature = "proto-ipv4")]
 mod igmp;
-pub(crate) mod ip;
+pub mod ip;
 #[cfg(feature = "proto-ipv4")]
-pub(crate) mod ipv4;
+pub mod ipv4;
 #[cfg(feature = "proto-ipv6")]
-pub(crate) mod ipv6;
+pub mod ipv6;
 #[cfg(feature = "proto-ipv6")]
 mod ipv6ext_header;
 #[cfg(feature = "proto-ipv6")]
@@ -193,7 +193,7 @@ pub use self::ipv4::{
 };
 
 #[cfg(feature = "proto-ipv4")]
-pub(crate) use self::ipv4::AddressExt as Ipv4AddressExt;
+pub use self::ipv4::AddressExt as Ipv4AddressExt;
 
 #[cfg(feature = "proto-ipv6")]
 pub use self::ipv6::{
@@ -205,7 +205,7 @@ pub use self::ipv6::{
     LINK_LOCAL_ALL_RPL_NODES as IPV6_LINK_LOCAL_ALL_RPL_NODES, MIN_MTU as IPV6_MIN_MTU,
 };
 #[cfg(feature = "proto-ipv6")]
-pub(crate) use self::ipv6::{AddressExt as Ipv6AddressExt, MulticastScope as Ipv6MulticastScope};
+pub use self::ipv6::{AddressExt as Ipv6AddressExt, MulticastScope as Ipv6MulticastScope};
 
 #[cfg(feature = "proto-ipv6")]
 pub use self::ipv6option::{
@@ -398,7 +398,7 @@ impl HardwareAddress {
     }
 
     #[cfg(feature = "medium-ethernet")]
-    pub(crate) fn ethernet_or_panic(&self) -> EthernetAddress {
+    pub fn ethernet_or_panic(&self) -> EthernetAddress {
         match self {
             HardwareAddress::Ethernet(addr) => *addr,
             #[allow(unreachable_patterns)]
@@ -407,7 +407,7 @@ impl HardwareAddress {
     }
 
     #[cfg(feature = "medium-ieee802154")]
-    pub(crate) fn ieee802154_or_panic(&self) -> Ieee802154Address {
+    pub fn ieee802154_or_panic(&self) -> Ieee802154Address {
         match self {
             HardwareAddress::Ieee802154(addr) => *addr,
             #[allow(unreachable_patterns)]
@@ -416,7 +416,7 @@ impl HardwareAddress {
     }
 
     #[inline]
-    pub(crate) fn medium(&self) -> Medium {
+    pub fn medium(&self) -> Medium {
         match self {
             #[cfg(feature = "medium-ip")]
             HardwareAddress::Ip => Medium::Ip,
