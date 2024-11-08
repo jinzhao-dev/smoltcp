@@ -2,7 +2,7 @@
 
 set -e
 
-CURRENT_BRANCH=$(git branch --show-current)
+CURRENT_BRANCH=$(git rev-parse HEAD)
 STAGING_BRANCH=staging
 
 git branch -D $STAGING_BRANCH >/dev/null 2>&1 || true
